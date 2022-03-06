@@ -8,6 +8,7 @@ public class Util {
    private static String URL = "jdbc:mysql://localhost:3306/testschema";
    private static String USERNAME = "root";
    private static String PASSWORD = "Three5Six";
+   static Connection connect;
 
    public static Connection getConnect() {
       Connection connect = null;
@@ -20,4 +21,14 @@ public class Util {
 
       return connect;
    }
+   public static void closeConnect() {
+      if (connect != null) {
+         try {
+            connect.close();
+         } catch (SQLException e) {
+            e.printStackTrace();
+         }
+      }
+   }
 }
+
