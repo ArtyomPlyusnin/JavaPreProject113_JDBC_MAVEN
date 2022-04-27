@@ -13,7 +13,7 @@ public class Main {
         userService.saveUser("SomeName2", "SomeLastName2", (byte)32);
         userService.saveUser("SomeName3", "SomeLastName3", (byte)33);
         System.out.println(userService.getAllUsers());
-        userService.cleanUsersTable();
-        userService.dropUsersTable();
+//        userService.cleanUsersTable();
+//        userService.dropUsersTable();
     }
 }
