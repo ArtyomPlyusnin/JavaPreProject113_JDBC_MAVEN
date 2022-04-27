@@ -17,7 +17,7 @@ public class Util {
    private static SessionFactory sessionFactory;
 
    public static SessionFactory getSessionFactory() {
-      if (sessionFactory == null){
+      if (sessionFactory == null) {
          try {
             Configuration configuration = new Configuration();
             Properties settings = new Properties();
@@ -41,6 +41,16 @@ public class Util {
          }
       }
       return sessionFactory;
+   }
+
+   public static void closeFactory() {
+      if (sessionFactory != null) {
+         try {
+            sessionFactory.close();
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+      }
    }
 }
 

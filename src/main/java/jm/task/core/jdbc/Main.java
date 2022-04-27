@@ -2,10 +2,10 @@ package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
+import jm.task.core.jdbc.util.Util;
 
 public class Main {
     public static void main(String[] args) {
-        // реализуйте алгоритм здесь
         UserService userService = new UserServiceImpl();
         userService.createUsersTable();
         userService.saveUser("SomeName", "SomeLastName", (byte)30);
@@ -13,7 +13,8 @@ public class Main {
         userService.saveUser("SomeName2", "SomeLastName2", (byte)32);
         userService.saveUser("SomeName3", "SomeLastName3", (byte)33);
         System.out.println(userService.getAllUsers());
-//        userService.cleanUsersTable();
-//        userService.dropUsersTable();
+        userService.cleanUsersTable();
+        userService.dropUsersTable();
+        Util.closeFactory();
     }
 }

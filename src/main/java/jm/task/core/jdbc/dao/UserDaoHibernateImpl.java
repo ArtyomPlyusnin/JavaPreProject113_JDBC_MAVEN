@@ -17,15 +17,13 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        Session session = null;
         String createTable = "CREATE TABLE IF NOT EXISTS user"
                 + "(id MEDIUMINT NOT NULL AUTO_INCREMENT, " +
                 "name CHAR(45) NOT NULL, " +
                 "lastName CHAR(45) NOT NULL," +
                 "age tinyint," +
                 "PRIMARY KEY (id))";
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createSQLQuery(createTable).executeUpdate();
             session.getTransaction().commit();
@@ -33,20 +31,13 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Таблица не создана.");
             e.printStackTrace();
-            session.getTransaction().rollback();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 
     @Override
     public void dropUsersTable() {
-        Session session = null;
         String sqlDrop = "DROP TABLE IF EXISTS user";
-        try {
-            session = Util.getSessionFactory().openSession();
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createSQLQuery(sqlDrop).executeUpdate();
             session.getTransaction().commit();
@@ -54,11 +45,6 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Таблица не удалена.");
             e.printStackTrace();
-            session.getTransaction().rollback();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 
@@ -66,9 +52,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void cleanUsersTable() {
 
         String sqlClean = "TRUNCATE TABLE user";
-        Session session = null;
-        try {
-            session = Util.getSessionFactory().openSession();
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             Query query = session.createSQLQuery(sqlClean);
             query.executeUpdate();
@@ -77,21 +61,13 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Не удалось очистить таблицу.");
             e.printStackTrace();
-            session.getTransaction().rollback();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
-
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = null;
 
-        try {
-            session = Util.getSessionFactory().openSession();
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.persist(new User(name, lastName, age));
             session.getTransaction().commit();
@@ -99,20 +75,13 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Не удалось добавить указанного пользователя.");
             e.printStackTrace();
-            session.getTransaction().rollback();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 
     @Override
     public void removeUserById(long id) {
 
-        Session session = null;
-        try {
-            session = Util.getSessionFactory().openSession();
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             User user = session.get(User.class, id);
             if (user != null) {
@@ -122,31 +91,19 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Не удалось удалить пользователя.");
             e.printStackTrace();
-            session.getTransaction().rollback();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-
-        Session session = null;
-        try {
-            session = Util.getSessionFactory().openSession();
+        List<User> listUsers = null;
+        try (Session session = sessionFactory.openSession()) {
             System.out.println("Список пользователей:");
-            return session.createQuery("From User").list();
+            listUsers = session.createQuery("From User").list();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            session.getTransaction().rollback();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
-        return session.createQuery("From User").list();
+        return listUsers;
     }
 
 }
